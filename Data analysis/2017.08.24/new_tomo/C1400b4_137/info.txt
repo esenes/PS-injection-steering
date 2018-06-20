@@ -1,0 +1,123 @@
++ ulimit -s unlimited
++ ulimit -a
+core file size          (blocks, -c) unlimited
+data seg size           (kbytes, -d) unlimited
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited
+pending signals                 (-i) 1030649
+max locked memory       (kbytes, -l) 64
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 65536
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+stack size              (kbytes, -s) unlimited
+cpu time               (seconds, -t) unlimited
+max user processes              (-u) 1024
+virtual memory          (kbytes, -v) unlimited
+file locks                      (-x) unlimited
++ export OMP_NUM_THREADS=4
++ OMP_NUM_THREADS=4
++ /eos/project/l/liu/Instrumentation/tomography/tomo_v2.intelmp
+Image001:
+ Tracking from time slice   1 to   2,   0.000% went outside the image width.
+ Tracking from time slice   1 to   3,   0.000% went outside the image width.
+ Tracking from time slice   1 to   4,   0.000% went outside the image width.
+ Tracking from time slice   1 to   5,   0.000% went outside the image width.
+ Tracking from time slice   1 to   6,   0.000% went outside the image width.
+ Tracking from time slice   1 to   7,   0.000% went outside the image width.
+ Tracking from time slice   1 to   8,   0.000% went outside the image width.
+ Tracking from time slice   1 to   9,   0.000% went outside the image width.
+ Tracking from time slice   1 to  10,   0.000% went outside the image width.
+ Tracking from time slice   1 to  11,   0.000% went outside the image width.
+ Tracking from time slice   1 to  12,   0.000% went outside the image width.
+ Tracking from time slice   1 to  13,   0.000% went outside the image width.
+ Tracking from time slice   1 to  14,   0.000% went outside the image width.
+ Tracking from time slice   1 to  15,   0.000% went outside the image width.
+ Tracking from time slice   1 to  16,   0.000% went outside the image width.
+ Tracking from time slice   1 to  17,   0.000% went outside the image width.
+ Tracking from time slice   1 to  18,   0.000% went outside the image width.
+ Tracking from time slice   1 to  19,   0.000% went outside the image width.
+ Tracking from time slice   1 to  20,   0.000% went outside the image width.
+ Tracking from time slice   1 to  21,   0.000% went outside the image width.
+ Tracking from time slice   1 to  22,   0.000% went outside the image width.
+ Tracking from time slice   1 to  23,   0.000% went outside the image width.
+ Tracking from time slice   1 to  24,   0.000% went outside the image width.
+ Tracking from time slice   1 to  25,   0.000% went outside the image width.
+ Tracking from time slice   1 to  26,   0.000% went outside the image width.
+ Tracking from time slice   1 to  27,   0.000% went outside the image width.
+ Tracking from time slice   1 to  28,   0.000% went outside the image width.
+ Tracking from time slice   1 to  29,   0.000% went outside the image width.
+ Tracking from time slice   1 to  30,   0.000% went outside the image width.
+ Tracking from time slice   1 to  31,   0.000% went outside the image width.
+ Tracking from time slice   1 to  32,   0.000% went outside the image width.
+ Tracking from time slice   1 to  33,   0.000% went outside the image width.
+ Tracking from time slice   1 to  34,   0.000% went outside the image width.
+ Tracking from time slice   1 to  35,   0.000% went outside the image width.
+ Tracking from time slice   1 to  36,   0.000% went outside the image width.
+ Tracking from time slice   1 to  37,   0.000% went outside the image width.
+ Tracking from time slice   1 to  38,   0.000% went outside the image width.
+ Tracking from time slice   1 to  39,   0.000% went outside the image width.
+ Tracking from time slice   1 to  40,   0.000% went outside the image width.
+ Tracking from time slice   1 to  41,   0.000% went outside the image width.
+ Tracking from time slice   1 to  42,   0.001% went outside the image width.
+ Tracking from time slice   1 to  43,   0.001% went outside the image width.
+ Tracking from time slice   1 to  44,   0.000% went outside the image width.
+ Tracking from time slice   1 to  45,   0.001% went outside the image width.
+ Tracking from time slice   1 to  46,   0.001% went outside the image width.
+ Tracking from time slice   1 to  47,   0.000% went outside the image width.
+ Tracking from time slice   1 to  48,   0.000% went outside the image width.
+ Tracking from time slice   1 to  49,   0.000% went outside the image width.
+ Tracking from time slice   1 to  50,   0.000% went outside the image width.
+ Tracking from time slice   1 to  51,   0.000% went outside the image width.
+ Tracking from time slice   1 to  52,   0.000% went outside the image width.
+ Tracking from time slice   1 to  53,   0.000% went outside the image width.
+ Tracking from time slice   1 to  54,   0.000% went outside the image width.
+ Tracking from time slice   1 to  55,   0.000% went outside the image width.
+ Tracking from time slice   1 to  56,   0.000% went outside the image width.
+ Tracking from time slice   1 to  57,   0.000% went outside the image width.
+ Tracking from time slice   1 to  58,   0.000% went outside the image width.
+ Tracking from time slice   1 to  59,   0.000% went outside the image width.
+ Tracking from time slice   1 to  60,   0.000% went outside the image width.
+ Tracking from time slice   1 to  61,   0.001% went outside the image width.
+ Tracking from time slice   1 to  62,   0.000% went outside the image width.
+ Tracking from time slice   1 to  63,   0.000% went outside the image width.
+ Tracking from time slice   1 to  64,   0.000% went outside the image width.
+ Tracking from time slice   1 to  65,   0.000% went outside the image width.
+ Tracking from time slice   1 to  66,   0.000% went outside the image width.
+ Tracking from time slice   1 to  67,   0.000% went outside the image width.
+ Tracking from time slice   1 to  68,   0.000% went outside the image width.
+ Tracking from time slice   1 to  69,   0.000% went outside the image width.
+ Tracking from time slice   1 to  70,   0.000% went outside the image width.
+ Tracking from time slice   1 to  71,   0.000% went outside the image width.
+ Tracking from time slice   1 to  72,   0.000% went outside the image width.
+ Tracking from time slice   1 to  73,   0.000% went outside the image width.
+ Tracking from time slice   1 to  74,   0.000% went outside the image width.
+ Tracking from time slice   1 to  75,   0.000% went outside the image width.
+ Tracking from time slice   1 to  76,   0.000% went outside the image width.
+ Tracking from time slice   1 to  77,   0.000% went outside the image width.
+ Tracking from time slice   1 to  78,   0.000% went outside the image width.
+ Tracking from time slice   1 to  79,   0.000% went outside the image width.
+ Tracking from time slice   1 to  80,   0.000% went outside the image width.
+ Tracking from time slice   1 to  81,   0.000% went outside the image width.
+ Tracking from time slice   1 to  82,   0.000% went outside the image width.
+ Tracking from time slice   1 to  83,   0.000% went outside the image width.
+ Tracking from time slice   1 to  84,   0.000% went outside the image width.
+ Tracking from time slice   1 to  85,   0.000% went outside the image width.
+ Tracking from time slice   1 to  86,   0.000% went outside the image width.
+ Tracking from time slice   1 to  87,   0.000% went outside the image width.
+ Tracking from time slice   1 to  88,   0.000% went outside the image width.
+ Tracking from time slice   1 to  89,   0.001% went outside the image width.
+ Tracking from time slice   1 to  90,   0.001% went outside the image width.
+ Tracking from time slice   1 to  91,   0.001% went outside the image width.
+ Tracking from time slice   1 to  92,   0.001% went outside the image width.
+ Tracking from time slice   1 to  93,   0.001% went outside the image width.
+ Tracking from time slice   1 to  94,   0.000% went outside the image width.
+ Tracking from time slice   1 to  95,   0.000% went outside the image width.
+ Tracking from time slice   1 to  96,   0.000% went outside the image width.
+ Tracking from time slice   1 to  97,   0.000% went outside the image width.
+ Iterating...
+
+real	0m31.818s
+user	0m25.369s
+sys	0m1.826s

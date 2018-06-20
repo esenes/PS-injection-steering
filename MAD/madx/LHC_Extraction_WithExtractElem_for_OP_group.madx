@@ -1,0 +1,113 @@
+!######################################################
+!# LHC extraction. Protons at 26 GeV/c. User: MD3
+!#
+!# Execute the file, with the comand: >madx < LHC_Extraction_WithExtractElem_for_OP_group.madx
+!#
+!######################################################
+!#
+!#  LHC EXTRACTION  (26 GeV/c)
+!#  BSW16a := (477)*318./320.;  ! BSP12
+!#  BSW16b := (477)*290./320.;  ! BSP14
+!#  BSW16f := 0;                ! BSP15
+!#  BSW16e := 0;                ! BSP18
+!#  BSW16c := (477)*318./320.;  ! BSP20
+!#  BSW16d := (477)*290./320.;  ! BSP22
+!#  PE.SMH16  =      0 A
+!#  PE.QKE16  =   1950 A
+!#  PE.BSW31  =      0 A  ( not used )
+!#  PE.SEH31  =      0 KV  ( not used )
+!#  Fast bump 21-9  not used
+!#  KFA71     =      0 KV
+!#  IQF       =      0 A
+!#  IQD       =      0 A
+
+
+
+
+/******************************************************************
+ * Initialization
+ ******************************************************************/
+TITLE, "LHC Extraction ...";
+
+
+
+
+/******************************************************************
+ * Circulating beam: BUMP16 ON, QKE16 ON
+ ******************************************************************/
+call,  file = '../elements/PS.ele';
+call,  file = '../sequence/PS.seq';
+call,  file = '../strength/PS_LHC_Extraction_WithExtractElem_for_OP_group.str';
+
+
+
+
+/******************************************************************
+ * Use
+ ******************************************************************/
+beam, particle=proton, pc=26; use, sequence=PS;
+
+set,  format="-21s";
+set,  format="12.8f";
+
+
+
+
+
+
+/***************************************************
+ * TWISS PTC
+ * "time=false" important for correct chromaticity and dispersion
+ * however  "time=true" => same as MADX, i.e. GammaTR = Q
+ ***************************************************/
+ptc_create_universe;
+ptc_create_layout,time=true,model=2,method=6,nst=5,exact; ! time = true => same as MADX, i.e. GammaTR = Q
+ptc_twiss,table=ptc_twiss,closed_orbit,icase=5,no=3,summary_table; ! ,file="twiss";
+select_ptc_normal, q1,q2; ! Write Q1 and Q2 in table "normal_results"
+ptc_normal,normal,icase=2,no=2;
+ptc_end;
+
+
+
+
+/***************************************************
+ * Write Injection_optics_Qx_<qx>_Q_<qy>.outx
+ * NB! Optics values given at end of elements - property of PTC
+ ***************************************************/
+write_optics(qx,qy): macro={
+   select,flag=ptc_twiss,clear;
+   select,flag=ptc_twiss, column = name,angle,k1L,k2L,k3L,
+                                   beta11,beta22,disp1,disp3,
+                                   x,y,alfa11,alfa22,mu1,mu2,
+                                   disp2,disp4,px,py;
+   write,table=ptc_twiss,file="../for_OP_group/LHC_Extraction_WithExtractElem_optics_Qx_0.qx_Qy_0.qy.outx";
+};
+
+Q1=100*table(normal_results,Q1,VALUE)+0.5;
+Q2=100*table(normal_results,Q2,VALUE)+0.5;
+exec, write_optics($Q1,$Q2);
+
+
+
+
+
+/***************************************************
+ * Write Injection_config
+ ***************************************************/
+write_config: macro={
+   select,flag=ptc_twiss,clear;
+   select,flag=ptc_twiss, column = KEYWORD, name, PARENT, L, S;
+   write,table=ptc_twiss,file="../for_OP_group/LHC_Extraction_WithExtractElem_config_file.outx";
+};
+
+exec, write_config();
+
+
+
+
+system, "rm fort.18";
+system, "rm end.map";
+
+STOP;
+
+

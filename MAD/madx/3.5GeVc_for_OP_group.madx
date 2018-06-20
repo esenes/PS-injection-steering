@@ -1,0 +1,98 @@
+!######################################################
+!# For information only. Protons at 3.5 GeV/c. User: TSTPS
+!#
+!# Execute file with the command: >madx < 3.5GeVc_for_OP_group.madx
+!#
+!######################################################
+!#
+!#  IQF       =      -8.3800 A
+!#  IQD       =      -5.0108 A
+
+
+/******************************************************************
+ * Circulating beam
+ ******************************************************************/
+call,  file = '../elements/PS.ele';
+call,  file = '../sequence/PS.seq';
+call,  file = '../strength/PS_3.5GeVc_for_OP_group.str';
+
+
+
+
+/******************************************************************
+ * Use
+ ******************************************************************/
+beam, particle=proton, pc=3.5; use, sequence=PS;
+
+set,  format="-21s";
+set,  format="12.8f";
+
+
+
+
+/***************************************************
+ * TWISS PTC
+ ***************************************************/
+ptc_create_universe;
+ptc_create_layout,time=true,model=2,method=6,nst=5,exact; ! time = true => same as MADX, i.e. GammaTR = Q
+ptc_twiss,table=ptc_twiss,closed_orbit,icase=5,no=3,summary_table; ! ,file="twiss";
+
+select_ptc_normal, q1,q2; ! Write Q1 and Q2 in table "normal_results"
+ptc_normal,normal,icase=2,no=2;
+ptc_end;
+
+!write,table=ptc_twiss;
+!write, table=normal_results, file=normal_results;
+
+
+
+
+
+/***************************************************
+ * Write Injection_optics_Qx_<qx>_Q_<qy>.outx
+ ***************************************************/
+write_optics(qx,qy): macro={
+   select,flag=ptc_twiss,clear;
+   select,flag=ptc_twiss, column = name,angle,k1L,k2L,k3L,
+                                   beta11,beta22,disp1,disp3,
+                                   x,y,alfa11,alfa22,mu1,mu2,
+                                   disp2,disp4,px,py;
+   write,table=ptc_twiss,file="../for_OP_group/3.5GeVc_optics_Qx_0.qx_Qy_0.qy.outx";
+};
+
+Q1=100*table(normal_results,Q1,VALUE)+0.5;
+Q2=100*table(normal_results,Q2,VALUE)+0.5;
+exec, write_optics($Q1,$Q2);
+
+
+
+
+
+/***************************************************
+ * Write Injection_config
+ ***************************************************/
+write_config: macro={
+   select,flag=ptc_twiss,clear;
+   select,flag=ptc_twiss, column = KEYWORD, name, PARENT, L, S;
+   write,table=ptc_twiss,file="../for_OP_group/3.5GeVc_config_file.outx";
+};
+
+exec, write_config();
+
+system, "rm fort.18";
+system, "rm end.map";
+
+
+
+
+/******************************************************************
+ * PLOT
+ ******************************************************************/
+resplot;
+setplot, post=2;
+
+PLOT, table=ptc_twiss, VAXIS=X,HAXIS=S,
+      SPLINE=FALSE, COLOUR=100, RANGE=#S/#E, FILE="../output/3.5GeVc";
+
+
+STOP;

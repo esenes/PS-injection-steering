@@ -1,0 +1,243 @@
+
+
+! Define macro for linear optics with ptc:
+ptctwiss_par: macro={
+  ptc_create_universe;
+  ptc_create_layout,time=false,model=2,method=6,nst=3,exact;
+  select,flag=ptc_twiss, clear;
+  select,flag=ptc_twiss, column=name, s,x,px,beta11,beta22,alfa11,alfa22,mu1,mu2;
+  ptc_twiss,closed_orbit,file=ps-ct-twiss.ptc;
+  betax_ref=table(ptc_twiss,BHZ03,beta11);
+  betay_ref=table(ptc_twiss,BHZ03,beta22);
+  ptc_end;
+};
+
+
+! Define macro for second order chromaticity with ptc:
+ptcchrom2: macro={
+
+
+  USE, sequence=PS;
+
+  ptc_create_universe; !, SECTOR_NMUL_MAX=10,SECTOR_NMUL=10 ;
+  ptc_create_layout,time=false,model=2,method=6,nst=3,exact;
+
+  select,flag=ptc_twiss, clear;
+  select,flag=ptc_twiss, column=name, s,x,px,beta11,beta22,alfa11,alfa22,mu1,mu2;
+
+  PTC_TWISS, CLOSED_ORBIT, TABLE=PTC_TWISS, ICASE=5, NO=3, DELTAP=PSHIFT ,SUMMARY_TABLE,file=ps-ct-twiss.ptc;
+
+! betax_ref=table(ptc_twiss,BHZ03,beta11);
+! betay_ref=table(ptc_twiss,BHZ03,beta22);
+
+  value,PFKI1F,PFKI2F,PFKI3F,PFKI4F,PFKI5F;
+  value,PFKI1D,PFKI2D,PFKI3D,PFKI4D,PFKI5D;
+
+  select_ptc_normal, q1=0, q2=0;
+  select_ptc_normal,dq1=1,dq2=1;
+  select_ptc_normal,dq1=2,dq2=2;
+  select_ptc_normal,dq1=3,dq2=3;
+  select_ptc_normal,dq1=4,dq2=4;
+  ptc_align;
+  ptc_normal,closed_orbit,normal,icase=5,no=5;
+  ptc_end;
+  qx0 =table(normal_results,value, 1);
+  qx1 =table(normal_results,value, 3);
+  qx2 =table(normal_results,value, 5);
+  qx3 =table(normal_results,value, 7);
+  qx4 =table(normal_results,value, 9);
+  qy0 =table(normal_results,value, 2);
+  qy1 =table(normal_results,value, 4);
+  qy2 =table(normal_results,value, 6);
+  qy3 =table(normal_results,value, 8);
+  qy4 =table(normal_results,value,10);
+
+  value,qx0,qx1,qx2/2,qx3/6,qx4/24;
+  value,qy0,qy1,qy2/2,qy3/6,qy4/24;
+
+ };
+
+
+
+! Define macro for second order chromaticity with mad:
+madchrom: macro={
+  twiss;
+  qx0=table(summ,q1);
+  qx1=table(summ,dq1);
+  qy0=table(summ,q2);
+  qy1=table(summ,dq2);
+  dpp:=1E-5;
+  twiss,deltap=dpp;
+  qxpp=table(summ,q1);
+  qypp=table(summ,q2);
+  twiss,deltap=-dpp;
+  qxmp=table(summ,q1);
+  qymp=table(summ,q2);
+  qx1a=(qxpp-qxmp)/dpp/2;
+  qy1a=(qypp-qymp)/dpp/2;
+  dpp:=6E-4;
+  twiss,deltap=dpp;
+  qxpp=table(summ,q1);
+  qypp=table(summ,q2);
+  twiss,deltap=-dpp;
+  qxmp=table(summ,q1);
+  qymp=table(summ,q2);
+  qx2=(qxpp-2*qx0+qxmp)/dpp^2;
+  qy2=(qypp-2*qy0+qymp)/dpp^2;
+};
+
+! Define macro for tracking at different deltap -----------------
+ptc_track_deltap: macro={
+ptc_create_universe, SECTOR_NMUL_MAX=10,SECTOR_NMUL=10;
+ptc_create_layout,time=false,model=2,method=6,nst=3,exact;
+ptc_align;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-1.4e-2,turns=256,  file="track_m0.01400_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-1.3e-2,turns=256,  file="track_m0.01300_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-1.2e-2,turns=256,  file="track_m0.01200_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-1.1e-2,turns=256,  file="track_m0.01100_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-1.0e-2,turns=256,  file="track_m0.01000_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.9e-2,turns=256,  file="track_m0.00900_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.8e-2,turns=256,  file="track_m0.00800_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.7e-2,turns=256,  file="track_m0.00700_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.6e-2,turns=256,  file="track_m0.00600_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.5e-2,turns=256,  file="track_m0.00500_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.4e-2,turns=256,  file="track_m0.00400_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.3e-2,turns=256,  file="track_m0.00300_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.2e-2,turns=256,  file="track_m0.00200_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.1e-2,turns=256,  file="track_m0.00100_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.9e-3,turns=256,  file="track_m0.00090_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.8e-3,turns=256,  file="track_m0.00080_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.7e-3,turns=256,  file="track_m0.00070_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.6e-3,turns=256,  file="track_m0.00060_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.5e-3,turns=256,  file="track_m0.00050_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.4e-3,turns=256,  file="track_m0.00040_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.3e-3,turns=256,  file="track_m0.00030_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.2e-3,turns=256,  file="track_m0.00020_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.1e-3,turns=256,  file="track_m0.00010_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=-0.5e-4,turns=256,  file="track_m0.00005_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.0e-4,turns=256,  file="track_m0.00000_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.5e-4,turns=256,  file="track_p0.00005_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.1e-3,turns=256,  file="track_p0.00010_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.2e-3,turns=256,  file="track_p0.00020_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.3e-3,turns=256,  file="track_p0.00030_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.4e-3,turns=256,  file="track_p0.00040_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.5e-3,turns=256,  file="track_p0.00050_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.6e-3,turns=256,  file="track_p0.00060_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.7e-3,turns=256,  file="track_p0.00070_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.8e-3,turns=256,  file="track_p0.00080_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.9e-3,turns=256,  file="track_p0.00090_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.1e-2,turns=256,  file="track_p0.00100_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.2e-2,turns=256,  file="track_p0.00200_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.3e-2,turns=256,  file="track_p0.00300_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.4e-2,turns=256,  file="track_p0.00400_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.5e-2,turns=256,  file="track_p0.00500_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.6e-2,turns=256,  file="track_p0.00600_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.7e-2,turns=256,  file="track_p0.00700_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.8e-2,turns=256,  file="track_p0.00800_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+0.9e-2,turns=256,  file="track_p0.00900_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+1.0e-2,turns=256,  file="track_p0.01000_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+1.1e-2,turns=256,  file="track_p0.01100_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+1.2e-2,turns=256,  file="track_p0.01200_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+1.3e-2,turns=256,  file="track_p0.01300_";
+PTC_TRACK_END;
+  ptc_start,X= 1.0E-6,PX= 0.0E-3,Y= 1.0E-6,PY= 0.0E-3,T=0.0,PT=0.0;
+PTC_TRACK,icase=5,closed_orbit,deltap=+1.4e-2,turns=256,  file="track_p0.01400_";
+PTC_TRACK_END;
+}
+
+RETURN;

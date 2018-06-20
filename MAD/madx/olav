@@ -1,0 +1,23 @@
+madx < 10GeVc_for_OP_group.madx
+madx < 14GeVc_NoExtractElem_for_OP_group.madx
+madx < 14GeVc_WithExtractElem_for_OP_group.madx
+madx < 24GeVc_Extraction_NoExtractElem_for_OP_group.madx
+madx < 24GeVc_Extraction_WithExtractElem_for_OP_group.madx
+madx < 24GeVc_for_OP_group.madx
+madx < 3.5GeVc_for_OP_group.madx
+madx < Injection10_for_OP_group.madx
+madx < Injection1_for_OP_group.madx
+madx < Injection2_for_OP_group.madx
+madx < Injection3_for_OP_group.madx
+madx < Injection4_for_OP_group.madx
+madx < Injection5_for_OP_group.madx
+madx < Injection6_for_OP_group.madx
+madx < Injection7_for_OP_group.madx
+madx < Injection8_for_OP_group.madx
+madx < Injection9_for_OP_group.madx
+madx < Ion_circulation_for_OP_group.madx
+madx < LHC_Extraction_NoExtractElem_for_OP_group.madx
+madx < LHC_Extraction_WithExtractElem_for_OP_group.madx
+madx < nTOF_20GeVc_NoExtractElem_for_OP_group.madx
+madx < nTOF_20GeVc_WithExtractElem_for_OP_group.madx
+
