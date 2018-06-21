@@ -1,6 +1,0 @@
-
-!!BBQ tune pickup,circular,r=0.08625, M.Gazior, C.Boccard. PS_BPMTS0004
-!! https://edms.cern.ch/file/1179241/0/ps_bpmts0004-v0.plt
-!! http://elogbook.cern.ch/eLogbook/eLogbook.jsp?shiftId=1052744
-PR.BPMTS, APERTYPE=ELLIPSE, APERTURE={0.08625,0.08625};
-
