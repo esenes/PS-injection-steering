@@ -42,8 +42,8 @@ endedit;
 /******************************************************************
  * Twiss
  ******************************************************************/
-px = 0.05e-3;
+px = 2e-3;
 
 use, sequence=PS;
-SELECT, FLAG=TWISS_TABLE, COLUMN=name, pos, BETX, BETY, X, Y;
-TWISS, ALFX=0.04604344501, ALFY=0.04619138727, BETX=22.50570259, BETY=11.56401298, DX=3.322080423, DY=0., DPX=0.003179871977, DPY=0., X=0, PX=px, Y=0., PY=0., TABLE=twiss_table, FILE=2turns_0.05e-3.twiss;
+SELECT, FLAG=TWISS_TABLE, COLUMN=name, s , BETX, BETY, X, Y;
+TWISS, ALFX=0.04604344501, ALFY=0.04619138727, BETX=22.50570259, BETY=11.56401298, DX=3.322080423, DY=0., DPX=0.003179871977, DPY=0., X=0, PX=px, Y=0., PY=0., TABLE=twiss_table, FILE=2turns_2e-3.twiss;
