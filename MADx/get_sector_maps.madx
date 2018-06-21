@@ -1,0 +1,274 @@
+/******************************************************************
+ * MAD-X PS Optics
+ **
+ ** Injection energy
+ **
+ ** Eugenio Senes
+ ** Created 20/06/18
+ ******************************************************************/
+
+/******************************************************************
+ * Call lattice files
+ ******************************************************************/
+Pc = 2.14;
+
+TITLE, "Injection_optics";
+
+call,  file = './lattice/elements/PS.ele';
+call,  file = './lattice/sequence/PS.seq';
+call,  file = './lattice/strength/PS_Injection3_for_OP_group.str';
+
+beam, particle=PROTON, pc=Pc;
+
+ /******************************************************************
+ * Matching
+ ******************************************************************/
+
+! tunes matched with QLOW to 0.24, 0.245
+iqf                =       -1.476984595 ; ! new running the matching once
+iqd                =       -2.205012404 ;
+
+/******************************************************************
+ * Cut the sequence between two BPMs
+ ******************************************************************/
+seqedit, sequence=PS;
+  flatten;
+  cycle, start=PR.BPM03; ! turned the BPMS into markers in the .ele file
+  extract, sequence=PS, from=PR.BPM03, to=PR.BPM05, newname=sector1;
+  extract, sequence=PS, from=PR.BPM05, to=PR.BPM07, newname=sector2;
+  extract, sequence=PS, from=PR.BPM07, to=PR.BPM10, newname=sector3;
+  extract, sequence=PS, from=PR.BPM10, to=PR.BPM13, newname=sector4;
+  extract, sequence=PS, from=PR.BPM13, to=PR.BPM15, newname=sector5;
+  extract, sequence=PS, from=PR.BPM15, to=PR.BPM17, newname=sector6;
+  extract, sequence=PS, from=PR.BPM17, to=PR.BPM20, newname=sector7;
+  extract, sequence=PS, from=PR.BPM20, to=PR.BPM23, newname=sector8;
+  extract, sequence=PS, from=PR.BPM23, to=PR.BPM25, newname=sector9;
+  extract, sequence=PS, from=PR.BPM25, to=PR.BPM27, newname=sector10;
+  extract, sequence=PS, from=PR.BPM27, to=PR.BPM30, newname=sector11;
+  extract, sequence=PS, from=PR.BPM30, to=PR.BPM33, newname=sector12;
+  extract, sequence=PS, from=PR.BPM33, to=PR.BPM35, newname=sector13;
+  extract, sequence=PS, from=PR.BPM35, to=PR.BPM37, newname=sector14;
+  extract, sequence=PS, from=PR.BPM37, to=PR.BPM40, newname=sector15;
+  extract, sequence=PS, from=PR.BPM40, to=PR.BPM43, newname=sector16;
+  extract, sequence=PS, from=PR.BPM43, to=PR.BPM45, newname=sector17;
+  extract, sequence=PS, from=PR.BPM45, to=PR.BPM47, newname=sector18;
+  extract, sequence=PS, from=PR.BPM47, to=PR.BPM50, newname=sector19;
+  extract, sequence=PS, from=PR.BPM50, to=PR.BPM53, newname=sector20;
+  extract, sequence=PS, from=PR.BPM53, to=PR.BPM54, newname=sector21;
+  extract, sequence=PS, from=PR.BPM54, to=PR.BPM55, newname=sector22;
+  extract, sequence=PS, from=PR.BPM55, to=PR.BPM57, newname=sector23;
+  extract, sequence=PS, from=PR.BPM57, to=PR.BPM60, newname=sector24;
+  extract, sequence=PS, from=PR.BPM60, to=PR.BPM63, newname=sector25;
+  extract, sequence=PS, from=PR.BPM63, to=PR.BPM64, newname=sector26;
+  extract, sequence=PS, from=PR.BPM64, to=PR.BPM65, newname=sector27;
+  extract, sequence=PS, from=PR.BPM65, to=PR.BPM67, newname=sector28;
+  extract, sequence=PS, from=PR.BPM67, to=PR.BPM68, newname=sector29;
+  extract, sequence=PS, from=PR.BPM68, to=PR.BPM70, newname=sector30;
+  extract, sequence=PS, from=PR.BPM70, to=PR.BPM73, newname=sector31;
+  extract, sequence=PS, from=PR.BPM73, to=PR.BPM75, newname=sector32;
+  extract, sequence=PS, from=PR.BPM75, to=PR.BPM77, newname=sector33;
+  extract, sequence=PS, from=PR.BPM77, to=PR.BPM80, newname=sector34;
+  extract, sequence=PS, from=PR.BPM80, to=PR.BPM83, newname=sector35;
+  extract, sequence=PS, from=PR.BPM83, to=PR.BPM85, newname=sector36;
+  extract, sequence=PS, from=PR.BPM85, to=PR.BPM87, newname=sector37;
+  extract, sequence=PS, from=PR.BPM87, to=PR.BPM90, newname=sector38;
+  extract, sequence=PS, from=PR.BPM90, to=PR.BPM93, newname=sector39;
+  extract, sequence=PS, from=PR.BPM93, to=PR.BPM95, newname=sector40;
+  extract, sequence=PS, from=PR.BPM95, to=PR.BPM97, newname=sector41;
+  extract, sequence=PS, from=PR.BPM97, to=PR.BPM00, newname=sector42;
+  ! extract, sequence=PS, from=PR.BPM00, to=PR.BPM03, newname=sector43; ! this needs another rotation
+  flatten;
+endedit;
+
+/******************************************************************
+ * Twiss
+ ******************************************************************/
+/* use, sequence=PS;
+SELECT, FLAG=TWISS, COLUMN=name, pos, BETX, BETY;
+TWISS, FILE=tw1.txt ; */
+
+use, sequence=sector1;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector1.sec;
+
+use, sequence=sector2;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector2.sec;
+
+use, sequence=sector3;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector3.sec;
+
+use, sequence=sector4;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector4.sec;
+
+use, sequence=sector5;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector5.sec;
+
+use, sequence=sector6;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector6.sec;
+
+use, sequence=sector7;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector7.sec;
+
+use, sequence=sector8;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector8.sec;
+
+use, sequence=sector9;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector9.sec;
+
+use, sequence=sector10;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector10.sec;
+
+use, sequence=sector11;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector11.sec;
+
+use, sequence=sector12;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector12.sec;
+
+use, sequence=sector13;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector13.sec;
+
+use, sequence=sector14;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector14.sec;
+
+use, sequence=sector15;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector15.sec;
+
+use, sequence=sector16;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector16.sec;
+
+use, sequence=sector17;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector17.sec;
+
+use, sequence=sector18;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector18.sec;
+
+use, sequence=sector19;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector19.sec;
+
+use, sequence=sector20;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector20.sec;
+
+use, sequence=sector21;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector21.sec;
+
+use, sequence=sector22;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector22.sec;
+
+use, sequence=sector23;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector23.sec;
+
+use, sequence=sector24;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector24.sec;
+
+use, sequence=sector25;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector25.sec;
+
+use, sequence=sector26;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector26.sec;
+
+use, sequence=sector27;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector27.sec;
+
+use, sequence=sector28;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector28.sec;
+
+use, sequence=sector29;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector29.sec;
+
+use, sequence=sector30;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector30.sec;
+
+use, sequence=sector31;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector31.sec;
+
+use, sequence=sector32;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector32.sec;
+
+use, sequence=sector33;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector33.sec;
+
+use, sequence=sector34;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector34.sec;
+
+use, sequence=sector35;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector35.sec;
+
+use, sequence=sector36;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector36.sec;
+
+use, sequence=sector37;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector37.sec;
+
+use, sequence=sector38;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector38.sec;
+
+use, sequence=sector39;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector39.sec;
+
+use, sequence=sector40;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector40.sec;
+
+use, sequence=sector41;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector41.sec;
+
+use, sequence=sector42;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector42.sec;
+
+
+/******************************************************************
+ * Rotation to do the first section
+ ******************************************************************/
+
+seqedit, sequence=PS;
+  flatten;
+  cycle, start=PR.BPM00; ! turned the BPMS into markers in the .ele file
+  extract, sequence=PS, from=PR.BPM00, to=PR.BPM03, newname=sector43;
+  flatten;
+endedit;
+
+use, sequence=sector43;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector43.sec;
+
+STOP;
