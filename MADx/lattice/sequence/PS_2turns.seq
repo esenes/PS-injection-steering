@@ -622,9 +622,7 @@ PS45: SEQUENCE, L= 1.0;
 
    PR.VPI45      :  VPI    , AT = 0.0;
    PR.BPM45      :  UNO    , AT = 0.0;
-   PI.KFA45_1    :  DRIFT  , AT = 0.3, L=Z*0.4;
-   KFA45_marker  :  MARKER , AT = 0.5;
-   PI.KFA45_2    :  DRIFT  , AT = 0.7, L = Z*0.4;
+   PI.KFA45      :  DRIFT  , AT = 0.5, L = Z*0.8;
    PR.QFN45      :  QNF    , AT = 1.0;
    PR.BHZ45      :  BHZ    , AT = 1.0;
 
