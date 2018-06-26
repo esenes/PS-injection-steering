@@ -11,11 +11,12 @@
 /******************************************************************
  * Call lattice files
  ******************************************************************/
-Pc = 2.14;
+Pc = 2.141766;
 
 TITLE, "Injection_optics";
 
 call,  file = './lattice/elements/PS.ele';
+/* call,  file = './lattice/sequence/PS.seq'; */
 call,  file = './lattice/sequence/PS_2turns.seq';
 call,  file = './lattice/strength/PS_Injection3_for_OP_group.str';
 
@@ -25,9 +26,26 @@ beam, particle=PROTON, pc=Pc;
  * Matching
  ******************************************************************/
 
-! tunes matched with QLOW to 0.24, 0.245
-iqf                =       -1.476984595 ; ! new running the matching once
-iqd                =       -2.205012404 ;
+! tunes matched with QLOW to 0.21, 0.24
+iqf                =       -3.202859816 ; ! new running the matching once
+iqd                =       -3.03684802 ;
+
+/*
+USE, SEQUENCE=PS; ! use with the single turn only
+MATCH, sequence=PS;
+  GLOBAL, SEQUENCE=PS, q1=6.21;
+  GLOBAL, SEQUENCE=PS, q2=6.24;
+  VARY, name=iqf, STEP=0.00001;
+  VARY, name=iqd, STEP=0.00001;
+  LMDIF, CALLS=1e3, TOLERANCE=1.0e-21;
+ENDMATCH;
+
+VALUE iqf;
+VALUE iqd;
+
+USE, SEQUENCE=PS;
+TWISS, FILE=tw.twiss;
+*/
 
 /******************************************************************
  * Start the sequence with the KFA45
@@ -42,8 +60,8 @@ endedit;
 /******************************************************************
  * Twiss
  ******************************************************************/
-px = 2e-3;
+px = .05e-3;
 
 use, sequence=PS;
 SELECT, FLAG=TWISS_TABLE, COLUMN=name, s , BETX, BETY, X, Y;
-TWISS, ALFX=0.04604344501, ALFY=0.04619138727, BETX=22.50570259, BETY=11.56401298, DX=3.322080423, DY=0., DPX=0.003179871977, DPY=0., X=0, PX=px, Y=0., PY=0., TABLE=twiss_table, FILE=2turns_2e-3.twiss;
+TWISS, ALFX=0.0617746555, ALFY=0.03894841981, BETX=22.54422587, BETY=11.55247649, DX=3.276857004, DY=0., DPX=0.00513649061, DPY=0., X=0, PX=px, Y=0., PY=0., TABLE=twiss_table, FILE=2turns_0.05e-3.twiss;
