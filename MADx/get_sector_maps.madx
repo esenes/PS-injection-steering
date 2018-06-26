@@ -3,6 +3,9 @@
  **
  ** Injection energy
  **
+ ** This file generates the sector map between a BPM and the next.
+ ** (x,xp) at BPM2 = MAP*(x,xp) at BPM1
+ **
  ** Eugenio Senes
  ** Created 20/06/18
  ******************************************************************/
@@ -33,7 +36,8 @@ iqd                =       -2.205012404 ;
  ******************************************************************/
 seqedit, sequence=PS;
   flatten;
-  cycle, start=PR.BPM03; ! turned the BPMS into markers in the .ele file
+  cycle, start=PR.BPM00; ! turned the BPMS into markers in the .ele file
+  extract, sequence=PS, from=PR.BPM00, to=PR.BPM03, newname=sector0;
   extract, sequence=PS, from=PR.BPM03, to=PR.BPM05, newname=sector1;
   extract, sequence=PS, from=PR.BPM05, to=PR.BPM07, newname=sector2;
   extract, sequence=PS, from=PR.BPM07, to=PR.BPM10, newname=sector3;
@@ -76,7 +80,6 @@ seqedit, sequence=PS;
   extract, sequence=PS, from=PR.BPM93, to=PR.BPM95, newname=sector40;
   extract, sequence=PS, from=PR.BPM95, to=PR.BPM97, newname=sector41;
   extract, sequence=PS, from=PR.BPM97, to=PR.BPM00, newname=sector42;
-  ! extract, sequence=PS, from=PR.BPM00, to=PR.BPM03, newname=sector43; ! this needs another rotation
   flatten;
 endedit;
 
@@ -86,6 +89,10 @@ endedit;
 /* use, sequence=PS;
 SELECT, FLAG=TWISS, COLUMN=name, pos, BETX, BETY;
 TWISS, FILE=tw1.txt ; */
+
+use, sequence=sector0;
+SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector0.sec;
 
 use, sequence=sector1;
 SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
@@ -251,24 +258,20 @@ use, sequence=sector41;
 SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
 TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector41.sec;
 
-use, sequence=sector42;
-SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
-TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector42.sec;
-
-
 /******************************************************************
- * Rotation to do the first section
+ * One last rotation to get the map passing through the origin
  ******************************************************************/
 
 seqedit, sequence=PS;
   flatten;
-  cycle, start=PR.BPM00; ! turned the BPMS into markers in the .ele file
-  extract, sequence=PS, from=PR.BPM00, to=PR.BPM03, newname=sector43;
+  cycle, start=PR.BPM97; ! turned the BPMS into markers in the .ele file
+  extract, sequence=PS, from=PR.BPM97, to=PR.BPM00, newname=sector42;
   flatten;
 endedit;
 
-use, sequence=sector43;
+use, sequence=sector42;
 SELECT, FLAG=sectortable, COLUMN=name, pos, r11, r12, r13, r14, r15, r16, r21, r22, r23, r24, r25, r26, r31, r32, r33, r34, r35, r36, r41, r42, r43, r44, r45, r46, r51, r52, r53, r54, r55, r56, r61, r62, r63, r64, r65, r66;
-TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector43.sec;
+TWISS,SECTORMAP=true, RMATRIX, SECTORACC=true, SECTORFILE=sector42.sec;
+
 
 STOP;
