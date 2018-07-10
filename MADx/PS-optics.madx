@@ -1,0 +1,44 @@
+/******************************************************************
+ * MAD-X PS Optics
+ **
+ ** modified Injection7 optics, remtached to the tunes we used.
+ **
+ ** Eugenio Senes
+ ** Created 09/07/18
+ ******************************************************************/
+
+/******************************************************************
+ * Call lattice files
+ ******************************************************************/
+Pc = 2.141766;
+
+TITLE, "Injection_optics";
+
+call,  file = './lattice/elements/PS.ele';
+call,  file = './lattice/sequence/PS.seq';
+call,  file = './lattice/strength/PS_Injection3_for_OP_group.str';
+
+beam, particle=PROTON, pc=Pc;
+
+ /******************************************************************
+ * Matching
+ ******************************************************************/
+
+USE, SEQUENCE=PS; ! use with the single turn only
+MATCH, sequence=PS;
+  GLOBAL, SEQUENCE=PS, q1=6.21;
+  GLOBAL, SEQUENCE=PS, q2=6.185;
+  VARY, name=iqf, STEP=0.00001;
+  VARY, name=iqd, STEP=0.00001;
+  LMDIF, CALLS=1e3, TOLERANCE=1.0e-21;
+ENDMATCH;
+
+VALUE iqf;
+VALUE iqd;
+
+USE, SEQUENCE=PS;
+ptc_create_universe;
+ptc_create_layout, time=false, model=2, exact=true, method=6, nst=5;
+ptc_twiss,closed_orbit,icase=56,no=4,summary_table=ptc_twiss_summary,file=PS_6.21_6.185.twiss;
+ptc_end;
+STOP;

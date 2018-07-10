@@ -26,26 +26,31 @@ beam, particle=PROTON, pc=Pc;
  * Matching
  ******************************************************************/
 
-! tunes matched with QLOW to 0.21, 0.24
+/* ! tunes matched with QLOW to 0.21, 0.24
 iqf                =       -3.202859816 ; ! new running the matching once
-iqd                =       -3.03684802 ;
+iqd                =       -3.03684802 ; */
+! tunes matched with QLOW to 0.21, 0.185
+iqf                =       -4.870909639;
+iqf                =       -5.774618062;
 
-/*
-USE, SEQUENCE=PS; ! use with the single turn only
+
+/* USE, SEQUENCE=PS; ! use with the single turn only
 MATCH, sequence=PS;
   GLOBAL, SEQUENCE=PS, q1=6.21;
-  GLOBAL, SEQUENCE=PS, q2=6.24;
+  GLOBAL, SEQUENCE=PS, q2=6.185;
   VARY, name=iqf, STEP=0.00001;
   VARY, name=iqd, STEP=0.00001;
   LMDIF, CALLS=1e3, TOLERANCE=1.0e-21;
 ENDMATCH;
 
 VALUE iqf;
-VALUE iqd;
+VALUE iqd; */
 
 USE, SEQUENCE=PS;
+/* SELECT, FLAG=TWISS, COLUMN=name, s , ALFX, ALFY, BETX, BETY, DX, DPX, X, Y;
+
 TWISS, FILE=tw.twiss;
-*/
+STOP; */
 
 /******************************************************************
  * Start the sequence with the KFA45
@@ -60,8 +65,12 @@ endedit;
 /******************************************************************
  * Twiss
  ******************************************************************/
-px = .05e-3;
+px =2e-3;
 
 use, sequence=PS;
 SELECT, FLAG=TWISS_TABLE, COLUMN=name, s , BETX, BETY, X, Y;
-TWISS, ALFX=0.0617746555, ALFY=0.03894841981, BETX=22.54422587, BETY=11.55247649, DX=3.276857004, DY=0., DPX=0.00513649061, DPY=0., X=0, PX=px, Y=0., PY=0., TABLE=twiss_table, FILE=2turns_0.05e-3.twiss;
+// Tunes 6.21/6.24
+/* TWISS, ALFX=0.0617746555, ALFY=0.03894841981, BETX=22.54422587, BETY=11.55247649, DX=3.276857004, DY=0., DPX=0.00513649061, DPY=0., X=0, PX=px, Y=0., PY=0., TABLE=twiss_table, FILE=2turns_0.05e-3.twiss; */
+
+//Tunes 6.21/6.185
+TWISS, ALFX=0.06458136829, ALFY=-0.024667295, BETX=22.63958593, BETY=11.27863385, DX=3.30085648, DY=0., DPX=0.009735058785, DPY=0., X=0, PX=px, Y=0., PY=0., TABLE=twiss_table, FILE=2turns_2e-3.twiss;

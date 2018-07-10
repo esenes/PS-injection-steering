@@ -27,9 +27,17 @@ beam, particle=PROTON, pc=Pc;
  * Matching
  ******************************************************************/
 
-! tunes matched with QLOW to 0.24, 0.245
+/* ! tunes matched with QLOW to 0.24, 0.245
 iqf                =       -1.476984595 ; ! new running the matching once
-iqd                =       -2.205012404 ;
+iqd                =       -2.205012404 ; */
+
+! tunes matched with QLOW to 0.21, 0.185
+iqf                =       -4.870909639;
+iqf                =       -5.774618062;
+
+/* ! tunes matched with QLOW to 0.21, 0.24
+iqf                =       -3.202859816 ; ! new running the matching once
+iqd                =       -3.03684802 ; */
 
 /******************************************************************
  * Cut the sequence between two BPMs
