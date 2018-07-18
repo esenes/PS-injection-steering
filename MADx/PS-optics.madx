@@ -26,8 +26,8 @@ beam, particle=PROTON, pc=Pc;
 
 USE, SEQUENCE=PS; ! use with the single turn only
 MATCH, sequence=PS;
-  GLOBAL, SEQUENCE=PS, q1=6.21;
-  GLOBAL, SEQUENCE=PS, q2=6.185;
+  GLOBAL, SEQUENCE=PS, q1=6.245;
+  GLOBAL, SEQUENCE=PS, q2=6.285;
   VARY, name=iqf, STEP=0.00001;
   VARY, name=iqd, STEP=0.00001;
   LMDIF, CALLS=1e3, TOLERANCE=1.0e-21;
@@ -39,6 +39,6 @@ VALUE iqd;
 USE, SEQUENCE=PS;
 ptc_create_universe;
 ptc_create_layout, time=false, model=2, exact=true, method=6, nst=5;
-ptc_twiss,closed_orbit,icase=56,no=4,summary_table=ptc_twiss_summary,file=PS_6.21_6.185.twiss;
+ptc_twiss,closed_orbit,icase=56,no=4,summary_table=ptc_twiss_summary,file=PS_6.245_6.285.twiss;
 ptc_end;
 STOP;

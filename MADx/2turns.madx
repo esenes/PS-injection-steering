@@ -65,7 +65,7 @@ endedit;
 /******************************************************************
  * Twiss
  ******************************************************************/
-px =2e-3;
+px =-2e-3;
 
 use, sequence=PS;
 SELECT, FLAG=TWISS_TABLE, COLUMN=name, s , BETX, BETY, X, Y;
@@ -73,4 +73,4 @@ SELECT, FLAG=TWISS_TABLE, COLUMN=name, s , BETX, BETY, X, Y;
 /* TWISS, ALFX=0.0617746555, ALFY=0.03894841981, BETX=22.54422587, BETY=11.55247649, DX=3.276857004, DY=0., DPX=0.00513649061, DPY=0., X=0, PX=px, Y=0., PY=0., TABLE=twiss_table, FILE=2turns_0.05e-3.twiss; */
 
 //Tunes 6.21/6.185
-TWISS, ALFX=0.06458136829, ALFY=-0.024667295, BETX=22.63958593, BETY=11.27863385, DX=3.30085648, DY=0., DPX=0.009735058785, DPY=0., X=0, PX=px, Y=0., PY=0., TABLE=twiss_table, FILE=2turns_2e-3.twiss;
+TWISS, ALFX=0.06458136829, ALFY=-0.024667295, BETX=22.63958593, BETY=11.27863385, DX=3.30085648, DY=0., DPX=0.009735058785, DPY=0., X=0, PX=px, Y=0., PY=0., TABLE=twiss_table, FILE=2turns_-2e-3.twiss;
